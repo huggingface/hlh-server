@@ -1,0 +1,53 @@
+name: Profiling Job
+run-name: profile-${{ inputs.request_id }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      file_content:
+        description: "Content of the file to profile"
+        required: true
+        type: string
+      filename:
+        description: "Name for the file"
+        required: false
+        default: "profile_target.py"
+        type: string
+      request_id:
+        description: "Request identifier from service"
+        required: true
+        type: string
+
+jobs:
+  profile:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Write file
+        env:
+          FILE_CONTENT: ${{ inputs.file_content }}
+          FILENAME: ${{ inputs.filename }}
+        run: python3 -c "import os; open(os.environ['FILENAME'], 'w').write(os.environ['FILE_CONTENT'])"
+      - name: Print request id
+        run: echo "request_id=${{ inputs.request_id }}"
+      - name: Install server deps
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+      - name: Run profiler
+        env:
+          FILENAME: ${{ inputs.filename }}
+        run: |
+          python3 -c "
+          import asyncio, json, os
+          from hlh_server.metal_profiler import profile_file
+
+          async def main():
+              result = await profile_file(os.environ['FILENAME'])
+              print(json.dumps(result, indent=2))
+
+          asyncio.run(main())
+          "
