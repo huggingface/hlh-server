@@ -95,8 +95,8 @@ Accepts a kernel source file as a multipart upload and returns a structured JSON
 
 The server supports two profiling backends controlled by `HLH_PROFILE_RUNNER`:
 
-- **`service`** (default) — Runs the kernel locally on the server host in a sandboxed subprocess. The subprocess uses Apple Metal / MPS profiling to capture GPU memory allocation, wall-clock duration, and optional Metal GPU trace artifacts (`gputrace`). Results are emitted as JSON on stdout and parsed by the server.
-- **`github`** — Dispatches the kernel to a GitHub Actions workflow via `gh workflow run`, polls the run until completion, and extracts the profiling JSON from the workflow logs. This path requires an authenticated `gh` CLI with permission to dispatch and inspect workflow runs. A unique `request_id` is embedded in the dispatch so the server can correlate the run, and a configurable timeout (`HLH_PROFILE_TIMEOUT_SECONDS`) bounds the poll loop.
+- **`github`** — (default) - Dispatches the kernel to a GitHub Actions workflow via `gh workflow run`, polls the run until completion, and extracts the profiling JSON from the workflow logs. This path requires an authenticated `gh` CLI with permission to dispatch and inspect workflow runs. A unique `request_id` is embedded in the dispatch so the server can correlate the run, and a configurable timeout (`HLH_PROFILE_TIMEOUT_SECONDS`) bounds the poll loop.
+- **`service`** - Runs the kernel locally on the server host in a sandboxed subprocess. The subprocess uses Apple Metal / MPS profiling to capture GPU memory allocation, wall-clock duration, and optional Metal GPU trace artifacts (`gputrace`). Results are emitted as JSON on stdout and parsed by the server.
 
 ### `POST /v1/hlh/submit`
 
