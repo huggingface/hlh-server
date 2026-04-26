@@ -22,7 +22,7 @@ def _bool_env(name: str, default: bool) -> bool:
 
 
 def _profile_runner_env() -> str:
-    raw = os.environ.get("HLH_PROFILE_RUNNER", "service").strip().lower()
+    raw = os.environ.get("HLH_PROFILE_RUNNER", "github").strip().lower()
     if raw in {"service", "github"}:
         return raw
     raise ValueError(f"invalid HLH_PROFILE_RUNNER: {raw!r}. expected one of: service, github")
@@ -37,11 +37,11 @@ class Settings:
     profile_workflow_ref: str = os.environ.get("HLH_PROFILE_WORKFLOW_REF", "main")
     profile_poll_seconds: int = _int_env("HLH_PROFILE_POLL_SECONDS", 5)
     profile_timeout_seconds: int = _int_env("HLH_PROFILE_TIMEOUT_SECONDS", 600)
-    upload_top_submission_bundle: bool = _bool_env("HLH_UPLOAD_TOP_SUBMISSION_BUNDLE", False)
+    upload_top_submission_bundle: bool = _bool_env("HLH_UPLOAD_TOP_SUBMISSION_BUNDLE", True)
     submit_bundle_enabled: bool = _bool_env("HLH_SUBMIT_BUNDLE_ENABLED", True)
     submit_bundle_bucket_template: str = os.environ.get(
         "HLH_SUBMIT_BUNDLE_BUCKET_TEMPLATE",
-        "{hf_user}/humanitys-last-hackathon",
+        "KhookieThief/humanitys-last-hackathon",
     )
     submit_bundle_hf_token_env: str = os.environ.get(
         "HLH_SUBMIT_BUNDLE_HF_TOKEN_ENV",
