@@ -26,8 +26,8 @@ jobs:
       contents: read
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
       - name: Write file
@@ -36,7 +36,9 @@ jobs:
           FILENAME: ${{ inputs.filename }}
         run: python3 -c "import os; open(os.environ['FILENAME'], 'w').write(os.environ['FILE_CONTENT'])"
       - name: Print request id
-        run: echo "request_id=${{ inputs.request_id }}"
+        env:
+          REQUEST_ID: ${{ inputs.request_id }}
+        run: echo "request_id=$REQUEST_ID"
       - name: Install server deps
         run: |
           python -m pip install --upgrade pip
