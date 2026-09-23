@@ -36,7 +36,9 @@ jobs:
           FILENAME: ${{ inputs.filename }}
         run: python3 -c "import os; open(os.environ['FILENAME'], 'w').write(os.environ['FILE_CONTENT'])"
       - name: Print request id
-        run: echo "request_id=${{ inputs.request_id }}"
+        run: echo "request_id=${INPUTS_REQUEST_ID}"
+        env:
+          INPUTS_REQUEST_ID: ${{ inputs.request_id }}
       - name: Install server deps
         run: |
           python -m pip install --upgrade pip
